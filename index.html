@@ -660,19 +660,7 @@ function initGoogleAuth() {
     callback: handleTokenResponse,
   });
   document.getElementById('btnSignIn').style.display='flex';
-
-  // Try silent restore
-  const saved = localStorage.getItem('cda_token');
-  if(saved) {
-    try {
-      const t = JSON.parse(saved);
-      if(t.expiry > Date.now()) {
-        S.accessToken = t.token;
-        restoreUser();
-        return;
-      }
-    } catch{}
-  }
+  // Always show login — user clicks to authenticate
   showLoginScreen();
 }
 
@@ -1777,6 +1765,8 @@ function toast(msg,type=''){const e=document.getElementById('notif');e.textConte
 // INIT
 // ════════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
+  // Always clear any stale token on load — user must click sign in
+  localStorage.removeItem('cda_token');
   initGoogleAuth();
 });
 </script>
